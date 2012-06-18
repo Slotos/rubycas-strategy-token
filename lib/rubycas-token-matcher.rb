@@ -15,11 +15,12 @@ module CASServer
         end
 
         def match(token)
+          return false if token.nil? || token.empty? # this should never happen, but what the hell, we're talking about authentication here
           matcher = @dataset.where(@config['token_column'].to_sym => token)
           matcher = matcher.filter("`#{@config['expire_column']}` >= ?", DateTime.now) if config['expire_column']
           raise "Multiple matches, database tainted" if matcher.count > 1
           match = matcher.first
-          matcher.delete
+          matcher.update(@config['token_column'].to_sym => nil)
           match
         end
       end
@@ -35,10 +36,13 @@ module CASServer
           end
 
           # Redirect to login page if we're still here. Preserve service and renew data
-          redirect_params = []
-          redirect_params << "service=#{CGI.escape session[:service]}" if session[:service]
-          redirect_params << "renew=#{session[:renew]}" if session[:renew]
-          redirect to("#{app.uri_path}/login?#{redirect_params.join('&')}"), 303
+          redirector = Addressable::URI.new
+          redirector.query_values = {
+              :service => session[:service],
+              :renew => session[:renew]
+          }.delete_if{|_,v| v.nil? || v.empty?}
+          redirector.path = "#{app.uri_path}/login"
+          redirect to(redirector.to_s), 303
         end
       end
     end

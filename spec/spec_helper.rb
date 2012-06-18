@@ -31,14 +31,30 @@ def add_user(email, *args)
 
   token = "this_is_secret_token"
   db[:users].truncate
-  db[:users].insert(
+  id = db[:users].insert(
     :email => email,
     :access_token_expires => (options[:expired] ? DateTime.now - 1 : DateTime.now + 1),
     :access_token => token
   )
 
   db.disconnect
-  token
+  {:token => token, :id => id}
+end
+
+def user_by_token(token)
+  db = Sequel.connect(@database)
+
+  user = db[:users].where(:access_token => token).all
+  db.disconnect
+  user
+end
+
+def user_by_id(id)
+  db = Sequel.connect(@database)
+
+  user = db[:users][:id => id]
+  db.disconnect
+  user
 end
 
 RSpec.configure do |conf|
