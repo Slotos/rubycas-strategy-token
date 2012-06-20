@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/rubycas-token-matcher/version', __FILE__)
+require File.expand_path('../lib/rubycas-strategy-token/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Dmitriy Soltys"]
@@ -11,9 +11,9 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "rubycas-token-matcher"
+  gem.name          = "rubycas-strategy-token"
   gem.require_paths = ["lib"]
-  gem.version       = CASServer::Matchers::Token::VERSION
+  gem.version       = CASServer::Strategy::Token::VERSION
 
   gem.add_dependency "sequel"
   gem.add_dependency "rubycas-server"

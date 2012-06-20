@@ -1,4 +1,4 @@
-matcher:
+strategy:
   token:
     database:
       adapter: sqlite

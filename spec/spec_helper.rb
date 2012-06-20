@@ -14,7 +14,7 @@ def config
 end
 
 def init_db!
-  @database = config["matcher"]["token"]["database"]
+  @database = config["strategy"]["token"]["database"]
   db = Sequel.connect(@database)
   db.create_table :users do
     primary_key :id
@@ -60,7 +60,7 @@ end
 RSpec.configure do |conf|
   conf.include Rack::Test::Methods
   conf.after :all do
-    FileUtils.rm_f(config["matcher"]["token"]["database"]["database"])
+    FileUtils.rm_f(config["strategy"]["token"]["database"]["database"])
   end
   conf.before :all do
     init_db!
@@ -79,8 +79,9 @@ class CASServer::Mock < Sinatra::Base
     @oauth_link = link
   end
 
-  require File.expand_path(File.dirname(File.dirname(__FILE__)) + '/lib/rubycas-token-matcher')
-  register CASServer::Matchers::Token
+  set :workhorse, config["strategy"]["token"]
+  require File.expand_path(File.dirname(File.dirname(__FILE__)) + '/lib/rubycas-strategy-token')
+  register CASServer::Strategy::Token
 end
 
 def app

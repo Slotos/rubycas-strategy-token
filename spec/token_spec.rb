@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/spec_helper'
 
-describe "token matcher behaviour" do
+describe "token strategy" do
   describe "valid token" do
     before :each do
       email = "random@random.test"

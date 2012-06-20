@@ -1,9 +1,9 @@
-require "rubycas-token-matcher/version"
+require "rubycas-strategy-token/version"
 require "sequel"
 require "addressable/uri"
 
 module CASServer
-  module Matchers
+  module Strategy
     module Token
       class Worker
         def initialize(config)
@@ -26,12 +26,12 @@ module CASServer
       end
 
       def self.registered(app)
-        settings = app.config["matcher"]["token"]
+        settings = app.workhorse
 
-        app.set :token_matcher, Worker.new(settings)
+        app.set :token_worker, Worker.new(settings)
 
         app.get "#{app.uri_path}/auth/token/:token" do
-          if match = app.settings.token_matcher.match(params[:token])
+          if match = app.settings.token_worker.match(params[:token])
             confirm_authentication! match[:email], session["service"]
           end
 
