@@ -7,7 +7,7 @@ describe "token strategy" do
       @user = add_user(email)
       @old_user = user_by_id(@user[:id])
 
-      app.any_instance.should_receive(:confirm_authentication!).with(email, nil)
+      app.any_instance.should_receive(:establish_session!).with(email, nil)
       get "/auth/token/#{@user[:token]}"
       last_response.should be_redirect
       follow_redirect!
@@ -32,7 +32,7 @@ describe "token strategy" do
     email = "random@random.test"
     @user = add_user(email, :expired => true)
 
-    app.any_instance.should_not_receive(:confirm_authentication!)
+    app.any_instance.should_not_receive(:establish_session!)
     get "/auth/token/#{@user[:token]}"
     last_response.should be_redirect
     follow_redirect!
@@ -42,7 +42,7 @@ describe "token strategy" do
   it "should not confirm authentication for invalid token" do
     token = "something_unrelated_seriously"
 
-    app.any_instance.should_not_receive(:confirm_authentication!)
+    app.any_instance.should_not_receive(:establish_session!)
     get "/auth/token/#{token}"
     last_response.should be_redirect
     follow_redirect!

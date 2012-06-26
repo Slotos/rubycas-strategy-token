@@ -32,7 +32,7 @@ module CASServer
 
         app.get "#{app.uri_path}/auth/token/:token" do
           if match = app.settings.token_worker.match(params[:token])
-            confirm_authentication! match[:email], session["service"]
+            establish_session! match[:email], session["service"]
           end
 
           # Redirect to login page if we're still here. Preserve service and renew data
