@@ -1,9 +1,8 @@
-strategy:
-  token:
-    database:
-      adapter: sqlite
-      database: spec.sqlite
-    user_table: users
-    username_column: email
-    token_column: access_token
-    expire_column: access_token_expires # optional
+strategies:
+  database:
+    adapter: sqlite
+    database: spec.sqlite
+  user_table: users
+  username_column: email
+  token_column: access_token
+  expire_column: access_token_expires # optional
