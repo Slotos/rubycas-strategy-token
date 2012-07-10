@@ -27,8 +27,9 @@ Of course I lied, there's no way to install it that way unless I release it as a
 For now you'll have to use my fork of rubycas-server if you want to use this matcher. All you need to do is add this definition to your config.yml (database line is Sequel compatible):
 
 ````yaml
-strategy:
-  token:
+strategies:
+  -
+    strategy: Token
     database:
       adapter: mysql2
       database: db
