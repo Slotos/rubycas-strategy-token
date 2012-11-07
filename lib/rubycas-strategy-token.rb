@@ -17,7 +17,7 @@ module CASServer
         def match(token)
           return false if token.nil? || token.empty? # this should never happen, but what the hell, we're talking about authentication here
           matcher = @dataset.where(@config['token_column'].to_sym => token)
-          matcher = matcher.filter("`#{@config['expire_column']}` >= ?", DateTime.now) if config['expire_column']
+          matcher = matcher.filter("`#{@config['expire_column']}` >= ?", DateTime.now) if @config['expire_column']
           raise "Multiple matches, database tainted" if matcher.count > 1
           match = matcher.first
           matcher.update(@config['token_column'].to_sym => nil)
